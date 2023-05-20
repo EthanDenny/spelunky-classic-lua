@@ -1,8 +1,8 @@
 require "core"
-require "spriteObject"
+require "objects/solid"
 
 Player = class(
-    SpriteObject,
+    Solid,
     {
         sprite=love.graphics.newImage("sprites/player.png"),
         width=16,
@@ -11,25 +11,40 @@ Player = class(
         y=0,
         mirrored=true,
     
+        col_width=10,
+        col_height=16,
+        col_x=3,
+        col_y=0,
+
         speed=3,
         gravity=4
     }
 )
 
-player = Player:new()
-
-function love.update(dt)
-    delta = dt * 30
-
+function Player:update(delta)
     if love.keyboard.isDown("left") and not love.keyboard.isDown("right") then
-        player.x = player.x - delta * player.speed
-        player.mirrored = false
+        self.x = self.x - delta * self.speed
+        self.mirrored = false
     end
     
     if love.keyboard.isDown("right") and not love.keyboard.isDown("left") then
-        player.x = player.x + delta * player.speed
-        player.mirrored = true
+        self.x = self.x + delta * self.speed
+        self.mirrored = true
     end
 
-    player.y = player.y + delta * player.gravity
+    local remaining_distance = delta * self.gravity
+
+    for i=0, remaining_distance do
+        self.y = self.y + 1
+        if self:isColliding() then
+            self.y = self.y - 1
+            break
+        end
+    end
+end
+
+player = Player:new()
+
+function love.update(dt)
+    player:update(dt * 30)
 end

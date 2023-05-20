@@ -1,12 +1,15 @@
 require "core"
-require "spriteObject"
+require "objects/solid"
 
 Block = class(
-    SpriteObject,
+    Solid,
     {
         sprite=love.graphics.newImage("sprites/block.png"),
         width=16,
         height=16,
+
+        col_width=16,
+        col_height=16
     }
 )
 
