@@ -11,9 +11,20 @@ end
 
 Object = {}
 
-function Object:new(o)
+objectList = {} -- Table of Object refs
+
+function Object:new(o, is_class)
     o = o or {}
     setmetatable(o, self)
     self.__index = self
+
+    if not is_class then
+        table.insert(objectList, o)
+    end
+    
     return o
+end
+
+function class(inherit, props)
+    return inherit:new(props, true)
 end

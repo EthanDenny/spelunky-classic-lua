@@ -1,18 +1,22 @@
 require "core"
 require "spriteObject"
 
-player = SpriteObject:new({
-    sprite=love.graphics.newImage("sprites/player.png"),
-    width=16,
-    height=16,
-    x=152,
-    y=208,
-    mirrored=true,
+Player = class(
+    SpriteObject,
+    {
+        sprite=love.graphics.newImage("sprites/player.png"),
+        width=16,
+        height=16,
+        x=152,
+        y=0,
+        mirrored=true,
+    
+        speed=3,
+        gravity=4
+    }
+)
 
-    speed=3
-})
-
-player:init()
+player = Player:new()
 
 function love.update(dt)
     delta = dt * 30
@@ -26,4 +30,6 @@ function love.update(dt)
         player.x = player.x + delta * player.speed
         player.mirrored = true
     end
+
+    player.y = player.y + delta * player.gravity
 end
