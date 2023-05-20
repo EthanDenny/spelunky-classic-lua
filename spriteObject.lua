@@ -1,7 +1,5 @@
 require "core"
 
-SpriteObjectList = {}
-
 SpriteObject = Object:new({
     sprite=nil,
     width=0,
@@ -13,11 +11,11 @@ SpriteObject = Object:new({
     mirrored=false
 })
 
-function SpriteObject:new(o)
-    o = Object:new(o)
-    table.insert(SpriteObjectList, o)
-    return o
+function SpriteObject:init()
+    table.insert(SpriteObjectList, self)
 end
+
+SpriteObjectList = {}
 
 function SpriteObjectList:draw()
     for _, obj in ipairs(SpriteObjectList) do
@@ -28,8 +26,8 @@ function SpriteObjectList:draw()
 
         love.graphics.draw(
             obj.sprite,
-            obj.x + offset.x,
-            obj.y + offset.y,
+            math.floor(obj.x + offset.x + 0.5),
+            math.floor(obj.y + offset.y + 0.5),
             obj.rotation,
             obj.mirrored and -1 or 1,
             obj.flipped and -1 or 1,

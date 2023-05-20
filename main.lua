@@ -1,5 +1,5 @@
 require "core"
-require "player"
+require "objects"
 
 SCREEN_SCALE = 2
 
