@@ -1,11 +1,4 @@
--- Main table
-
 core = {}
-core.drawFunctions = {}
-
-function core:draw()
-    for _, f in ipairs(core.drawFunctions) do f() end
-end
 
 -- Object class
 
@@ -27,4 +20,18 @@ end
 
 function class(inherit, props)
     return inherit:new(props, true)
+end
+
+-- Per-frame functions
+
+function core:update(delta)
+    for _, obj in pairs(objectList) do
+        if obj.update then obj:update(delta) end
+    end
+end
+
+function core:draw()
+    for _, obj in pairs(objectList) do
+        if obj.draw then obj:draw() end
+    end
 end

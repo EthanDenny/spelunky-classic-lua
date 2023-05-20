@@ -44,7 +44,3 @@ function Player:update(delta)
 end
 
 player = Player:new()
-
-function love.update(dt)
-    player:update(dt * 30)
-end

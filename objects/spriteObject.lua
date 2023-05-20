@@ -14,26 +14,20 @@ SpriteObject = class(
     }
 )
 
-function drawSpriteObjects()
-    for _, obj in ipairs(objectList) do
-        if obj.sprite then -- Assume this is a SpriteObject
-            offset = {
-                x = obj.width / 2,
-                y = obj.height / 2
-            }
+function SpriteObject:draw()
+    offset = {
+        x = self.width / 2,
+        y = self.height / 2
+    }
 
-            love.graphics.draw(
-                obj.sprite,
-                math.floor(obj.x + offset.x + 0.5),
-                math.floor(obj.y + offset.y + 0.5),
-                obj.rotation,
-                obj.mirrored and -1 or 1,
-                obj.flipped and -1 or 1,
-                offset.x,
-                offset.y
-            )
-        end
-    end
+    love.graphics.draw(
+        self.sprite,
+        math.floor(self.x + offset.x + 0.5),
+        math.floor(self.y + offset.y + 0.5),
+        self.rotation,
+        self.mirrored and -1 or 1,
+        self.flipped and -1 or 1,
+        offset.x,
+        offset.y
+    )
 end
-
-table.insert(core.drawFunctions, drawSpriteObjects)

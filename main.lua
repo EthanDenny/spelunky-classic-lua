@@ -20,3 +20,7 @@ function love.draw()
     love.graphics.setCanvas()
     love.graphics.draw(canvas, 0, 0, 0, SCREEN_SCALE, SCREEN_SCALE)
 end
+
+function love.update(dt)
+    core:update(dt * 30)
+end
