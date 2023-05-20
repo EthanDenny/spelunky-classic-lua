@@ -14,7 +14,7 @@ end
 function love.draw()
     love.graphics.setCanvas(canvas)
 
-    love.graphics.clear()
+    love.graphics.clear(7/256, 12/256, 16/256, 1)
     core:draw()
 
     love.graphics.setCanvas()

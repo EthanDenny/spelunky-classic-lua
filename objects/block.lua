@@ -13,8 +13,10 @@ Block = class(
     }
 )
 
-for i = 0, 19 do
-    block = Block:new()
-    block.x = i * 16
-    block.y = 224
+for x = 0, 19 do
+    for y = 0, 2 do
+        block = Block:new()
+        block.x = x * 16
+        block.y = y * 16 + 192
+    end
 end
