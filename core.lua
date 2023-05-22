@@ -35,3 +35,19 @@ function core:draw()
         if obj.draw then obj:draw() end
     end
 end
+
+-- Helper functions
+
+function approximatelyZero(value)
+    return math.abs(value) < 0.1
+end
+
+function clamp(value, bound)
+    if value > bound then
+        return bound
+    elseif value < -bound then
+        return -bound
+    else
+        return value
+    end
+end

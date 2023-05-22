@@ -1,7 +1,7 @@
 require "core"
 require "objects"
 
-SCREEN_SCALE = 2
+SCREEN_SCALE = 3
 
 function love.load()
     love.window.setTitle("Spelunky Classic LÖVE")

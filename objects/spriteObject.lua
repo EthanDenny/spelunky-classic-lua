@@ -22,8 +22,8 @@ function SpriteObject:draw()
 
     love.graphics.draw(
         self.sprite,
-        math.floor(self.x + offset.x + 0.5),
-        math.floor(self.y + offset.y + 0.5),
+        math.floor(self.x + 0.5),
+        math.floor(self.y + 0.5),
         self.rotation,
         self.mirrored and -1 or 1,
         self.flipped and -1 or 1,
