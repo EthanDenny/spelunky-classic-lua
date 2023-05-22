@@ -136,40 +136,30 @@ function Player:update(delta)
 end
 
 function Player:moveTo(delta)
+    local xVelInteger = math.floor(math.abs(self.vel.x))
+    local yVelInteger = math.floor(math.abs(self.vel.y))
+
     if self.vel.x < 0 then
-        for i=0, math.abs(self.vel.x) do
-            if self:isColLeft() then
-                break
-            else
-                self.x = self.x - delta
-            end
+        for i=0, xVelInteger do
+            if self:isColLeft(delta) then break end
+            self.x = self.x - delta
         end
     elseif self.vel.x > 0 then
-        for i=0, self.vel.x do
-            if self:isColRight() then
-                break
-            else
-                self.x = self.x + delta
-            end
+        for i=0, xVelInteger do
+            if self:isColRight(delta) then break end
+            self.x = self.x + delta
         end
     end
 
     if self.vel.y < 0 then
-        for i=0, math.abs(self.vel.y) do
-            if self:isColTop() then
-                break
-            else
-                self.y = self.y - delta
-            end
+        for i=0, yVelInteger do
+            if self:isColTop(delta) then break end
+            self.y = self.y - delta
         end
     elseif self.vel.y > 0 then
-        for i=0, self.vel.y do
-            if self:isColBottom() then
-                self.y = math.floor(self.y + 0.5)
-                break
-            else
-                self.y = self.y + delta
-            end
+        for i=0, yVelInteger do
+            if self:isColBottom(delta) then break end
+            self.y = self.y + delta
         end
     end
 end

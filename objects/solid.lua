@@ -25,30 +25,34 @@ function Solid:isColliding()
     return false
 end
 
-function Solid:isColLeft()
-    self.x = self.x - 1
+function Solid:isColLeft(amount)
+    if amount == nil then amount = 1 end
+    self.x = self.x - amount
     col = self:isColliding()
-    self.x = self.x + 1
+    self.x = self.x + amount
     return col
 end
 
-function Solid:isColRight()
-    self.x = self.x + 1
+function Solid:isColRight(amount)
+    if amount == nil then amount = 1 end
+    self.x = self.x + amount
     col = self:isColliding()
-    self.x = self.x - 1
+    self.x = self.x - amount
     return col
 end
 
-function Solid:isColTop()
-    self.y = self.y - 1
+function Solid:isColTop(amount)
+    if amount == nil then amount = 1 end
+    self.y = self.y - amount
     col = self:isColliding()
-    self.y = self.y + 1
+    self.y = self.y + amount
     return col
 end
 
-function Solid:isColBottom()
-    self.y = self.y + 1
+function Solid:isColBottom(amount)
+    if amount == nil then amount = 1 end
+    self.y = self.y + amount
     col = self:isColliding()
-    self.y = self.y - 1
+    self.y = self.y - amount
     return col
 end
