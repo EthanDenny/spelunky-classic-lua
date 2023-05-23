@@ -23,9 +23,26 @@ local kJump = false
 local kLeftPushedSteps = 0
 local kRightPushedSteps = 0
 
+-- Physics
+
+local grav = 1
+local gravNorm = 1
+local gravityIntensity = grav
+
+local xVelLimit = 16
+local yVelLimit = 10
+local xAccLimit = 9
+local yAccLimit = 6
 local runAcc = 3
+
+local initialJumpAcc = -2
+local jumpTimeTotal = 10
+local jumpTime = jumpTimeTotal
+
 local frictionRunningX = 0.6
 local frictionRunningFastX = 0.98
+
+-- Player
 
 Player = class(
     Solid,
@@ -46,8 +63,7 @@ Player = class(
         acc={x=0, y=0},
         fric={x=1, y=1},
 
-        velLimit={x=16, y=10},
-        accLimit={x=9, y=6},
+        isOnGround = false,
     }
 )
 
@@ -71,8 +87,6 @@ function Player:update(delta)
     kJumpReleased = kJump and not love.keyboard.isDown("z")
     kJump = love.keyboard.isDown("z")
 
-    -- Count input ticks
-
     if kLeft then
         kLeftPushedSteps = kLeftPushedSteps + delta
     else
@@ -91,54 +105,98 @@ function Player:update(delta)
     if kRightReleased and approximatelyZero(self.vel.x) then self.acc.x = self.acc.x + 0.5 end
 
     if kLeft and not kRight then
-        if kLeftPushedSteps > 2 then
+        if kLeftPushedSteps > 2 and (not self.mirrored or approximatelyZero(self.vel.x)) then
             self.acc.x = self.acc.x - runAcc
         end
         self.mirrored = false
     end
   
     if kRight and not kLeft then
-        if kRightPushedSteps > 2 then
+        if kRightPushedSteps > 2 and (self.mirrored or approximatelyZero(self.vel.x)) then
             self.acc.x = self.acc.x + runAcc
         end
         self.mirrored = true
     end
 
-	-- Final calculations and movement
+    self.fric.x = frictionRunningX
 
     if self:isColBottom() and kRun then
         if kLeft then
             self.vel.x = self.vel.x - delta * 0.1
-            self.velLimit.x = 6
+            xVelLimit = 6
             self.fric.x = frictionRunningFastX
         elseif kRight then
             self.vel.x = self.vel.x + delta * 0.1
-            self.velLimit.x = 6
+            xVelLimit = 6
             self.fric.x = frictionRunningFastX
-        else
-            self.fric.x = frictionRunningX
         end
-    else
-        self.fric.x = frictionRunningX
+    elseif not self.isOnGround then
+        self.fric.x = 0.8
     end
-
-    self.acc.x = clamp(self.acc.x, self.accLimit.x)
-	self.acc.y = clamp(self.acc.y, self.accLimit.y)
 
     if self:isColBottom() and not kJump and not kDown and not kRun then
-		self.velLimit.x = 3
+        xVelLimit = 3
     end
-	
-	self.vel.x = (self.vel.x + self.acc.x) * self.fric.x
-    self.vel.y = 10 -- (self.vel.y + self.acc.y) * self.fric.y
 
-	self.acc = {x=0, y=0}
-	
-	self.vel.x = clamp(self.vel.x, self.velLimit.x)
-	self.vel.y = clamp(self.vel.y, self.velLimit.y)
-	
-	if approximatelyZero(self.vel.x) then self.vel.x = 0 end
-	if approximatelyZero(self.vel.y) then self.vel.y = 0 end
+    -- Jumping
+
+    if not self.isOnGround then
+        self.acc.y = self.acc.y + gravityIntensity * delta
+    end
+
+    if self:isColBottom() then
+        self.isOnGround = true
+        self.vel.y = 0
+        self.acc.y = 0
+    end
+
+    if not self:isColBottom() and self.isOnGround then
+        self.isOnGround = false
+        self.acc.y = self.acc.y + grav * delta
+    end
+
+    if self.isOnGround and kJumpPressed then
+        if math.abs(self.vel.x) > 3 then
+            self.acc.x = self.acc.x + self.vel.x * 2
+        else
+            self.acc.x = self.acc.x + self.vel.x / 2
+        end
+
+        self.acc.y = self.acc.y + initialJumpAcc * 2
+
+        yAccLimit = 6
+        grav = gravNorm
+
+        self.isOnGround = false
+
+        jumpTime = 0
+    end
+
+    if jumpTime < jumpTimeTotal then
+        jumpTime = jumpTime + delta
+    end
+
+    if kJumpReleased then
+        jumpTime = jumpTimeTotal
+    end
+
+    gravityIntensity = (jumpTime / jumpTimeTotal) * grav
+
+    -- Final calculations and movement
+
+    self.acc.x = clamp(self.acc.x, xAccLimit)
+    self.acc.y = clamp(self.acc.y, yAccLimit)
+
+    self.vel.x = (self.vel.x + self.acc.x) * self.fric.x
+    self.vel.y = (self.vel.y + self.acc.y) * self.fric.y
+
+    self.acc = {x=0, y=0}
+
+    self.vel.x = clamp(self.vel.x, xVelLimit)
+    self.vel.y = clamp(self.vel.y, yVelLimit)
+    
+    if approximatelyZero(self.vel.x) then self.vel.x = 0 end
+    if approximatelyZero(self.vel.y) then self.vel.y = 0 end
 
     self:moveTo(delta)
 end
