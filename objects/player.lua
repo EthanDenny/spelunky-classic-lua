@@ -1,6 +1,8 @@
 require "core"
 require "objects/solid"
 
+-- Inputs
+
 local kLeftReleased = false
 local kLeft = false
 local kRightReleased = false
@@ -10,6 +12,9 @@ local kRun = false
 local kAttack = false
 local kUp = false
 local kDown = false
+
+local kItemPressed = false
+local kItem = false
 
 local kJumpPressed = false
 local kJumpReleased = false
@@ -58,6 +63,9 @@ function Player:update(delta)
     kAttack = love.keyboard.isDown("x")
     kUp = love.keyboard.isDown("up")
     kDown = love.keyboard.isDown("down")
+
+    kItemPressed = not kItem and love.keyboard.isDown("c")
+    kItem = love.keyboard.isDown("c")
 
     kJumpPressed = not kJump and love.keyboard.isDown("z")
     kJumpReleased = kJump and not love.keyboard.isDown("z")
