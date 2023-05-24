@@ -1,5 +1,6 @@
 require "core"
 require "objects/solid"
+require "keybindings"
 
 -- Inputs
 
@@ -22,6 +23,25 @@ local kJump = false
 
 local kLeftPushedSteps = 0
 local kRightPushedSteps = 0
+
+function love.keypressed(key, scancode)
+    if scancode == keybinds.jump then kJumpPressed = true end
+    if scancode == keybinds.item then kItemPressed = true end
+end
+
+function love.keyreleased(key, scancode)
+    if scancode == keybinds.left then kLeftReleased = true end
+    if scancode == keybinds.right then kRightReleased = true end
+    if scancode == keybinds.jump then kJumpReleased = true end
+end
+
+function resetKeyPresses()
+    kLeftReleased = false
+    kRightReleased = false
+    kJumpPressed = false
+    kJumpReleased = false
+    kItemPressed = false
+end
 
 -- Physics
 
@@ -70,22 +90,14 @@ Player = class(
 function Player:update(delta)
     -- Get inputs
 
-    kLeftReleased = kLeft and not love.keyboard.isDown("left")
-    kLeft = love.keyboard.isDown("left")
-    kRightReleased = kRight and not love.keyboard.isDown("right")
-    kRight = love.keyboard.isDown("right")
+    kLeft = love.keyboard.isDown(keybinds.left)
+    kRight = love.keyboard.isDown(keybinds.right)
+    kUp = love.keyboard.isDown(keybinds.up)
+    kDown = love.keyboard.isDown(keybinds.down)
 
-    kRun = love.keyboard.isDown("lshift")
-    kAttack = love.keyboard.isDown("x")
-    kUp = love.keyboard.isDown("up")
-    kDown = love.keyboard.isDown("down")
-
-    kItemPressed = not kItem and love.keyboard.isDown("c")
-    kItem = love.keyboard.isDown("c")
-
-    kJumpPressed = not kJump and love.keyboard.isDown("z")
-    kJumpReleased = kJump and not love.keyboard.isDown("z")
-    kJump = love.keyboard.isDown("z")
+    kRun = love.keyboard.isDown(keybinds.run)
+    kJump = love.keyboard.isDown(keybinds.jump)
+    kAttack = love.keyboard.isDown(keybinds.attack)
 
     if kLeft then
         kLeftPushedSteps = kLeftPushedSteps + delta
@@ -199,6 +211,8 @@ function Player:update(delta)
     if approximatelyZero(self.vel.y) then self.vel.y = 0 end
 
     self:moveTo(delta)
+
+    resetKeyPresses()
 end
 
 function Player:moveTo(delta)
