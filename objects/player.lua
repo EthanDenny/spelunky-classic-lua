@@ -83,7 +83,17 @@ Player = class(
         acc={x=0, y=0},
         fric={x=1, y=1},
 
+        -- States
+
+        isDucking = false,
+        isLookingUp = false,
+
         isOnGround = false,
+        isClimbing = false,
+        isJumping = false,
+
+        isDuckingToHang = false,
+        isHanging = false,
     }
 )
 
@@ -111,48 +121,64 @@ function Player:update(delta)
         kRightPushedSteps = 0
     end
 
+    if kRun then
+        runHeld = 100
+    end
+    
+    if kAttack then
+        runHeld = runHeld + delta
+    end
+
+    if not kRun or (not kLeft and not kRight) then
+        runHeld = 0
+    end
+
     -- Walking
 
-    if kLeftReleased and approximatelyZero(self.vel.x) then self.acc.x = self.acc.x - 0.5 end
-    if kRightReleased and approximatelyZero(self.vel.x) then self.acc.x = self.acc.x + 0.5 end
+    if not self.isClimbing and not self.isHanging then
+        if kLeftReleased and approximatelyZero(self.vel.x) then self.acc.x = self.acc.x - 0.5 end
+        if kRightReleased and approximatelyZero(self.vel.x) then self.acc.x = self.acc.x + 0.5 end
 
-    if kLeft and not kRight then
-        if kLeftPushedSteps > 2 and (not self.mirrored or approximatelyZero(self.vel.x)) then
-            self.acc.x = self.acc.x - runAcc
+        if kLeft and not kRight then
+            if kLeftPushedSteps > 2 and (not self.mirrored or approximatelyZero(self.vel.x)) then
+                self.acc.x = self.acc.x - runAcc
+            end
+            self.mirrored = false
         end
-        self.mirrored = false
-    end
-  
-    if kRight and not kLeft then
-        if kRightPushedSteps > 2 and (self.mirrored or approximatelyZero(self.vel.x)) then
-            self.acc.x = self.acc.x + runAcc
+    
+        if kRight and not kLeft then
+            if kRightPushedSteps > 2 and (self.mirrored or approximatelyZero(self.vel.x)) then
+                self.acc.x = self.acc.x + runAcc
+            end
+            self.mirrored = true
         end
-        self.mirrored = true
-    end
-
-    self.fric.x = frictionRunningX
-
-    if self:isColBottom() and kRun then
-        if kLeft then
-            self.vel.x = self.vel.x - delta * 0.1
-            xVelLimit = 6
-            self.fric.x = frictionRunningFastX
-        elseif kRight then
-            self.vel.x = self.vel.x + delta * 0.1
-            xVelLimit = 6
-            self.fric.x = frictionRunningFastX
-        end
-    elseif not self.isOnGround then
-        self.fric.x = 0.8
     end
 
     if self:isColBottom() and not kJump and not kDown and not kRun then
         xVelLimit = 3
     end
 
+    -- Bouncing off solids
+
+    if self:isColTop() then
+        if dead or stunned then
+            self.vel.y = -self.vel.y * 0.8
+        elseif not self.isOnGround and self.isJumping then
+            self.vel.y = math.abs(self.vel.y * 0.3)
+        end
+    end
+
+    if (self:isColLeft() and not self.mirrored) or (self:isColRight() and self.mirrored) then
+        if dead or stunned then
+            self.vel.x = -self.vel.x * 0.5
+        else
+            self.vel.x = 0
+        end
+    end
+
     -- Jumping
 
-    if not self.isOnGround then
+    if not self.isOnGround and not self.isHanging then
         self.acc.y = self.acc.y + gravityIntensity * delta
     end
 
@@ -164,6 +190,7 @@ function Player:update(delta)
 
     if not self:isColBottom() and self.isOnGround then
         self.isOnGround = false
+        self.isJumping = false
         self.acc.y = self.acc.y + grav * delta
     end
 
@@ -193,6 +220,69 @@ function Player:update(delta)
     end
 
     gravityIntensity = (jumpTime / jumpTimeTotal) * grav
+
+    -- Changing states
+
+    self.isLookingUp = kUp and self.isOnGround
+
+    if kDown then
+        self.isDucking = self.isOnGround
+    elseif self.isDucking then
+        self.isDucking = false
+        self.vel.x = 0
+        self.acc.x = 0
+    end
+
+    if self.vel.y < 0 and not self.isOnGround and not self.isHanging then
+        self.isJumping = true
+    end
+
+    if self.vel.y > 0 and not self.isOnGround and not self.isHanging then
+        self.isJumping = true
+        self.colHeight = 14
+        self.colY = 2
+    else
+        self.colHeight = 16
+        self.colY = 0
+    end
+
+    -- Calculate friction
+
+    if not self.isClimbing then
+        if kRun and self.isOnGround and runHeld >= 10 then
+            if kLeft then
+                self.vel.x = self.vel.x - delta * 0.1
+                xVelLimit = 6
+                self.fric.x = frictionRunningFastX
+            elseif kRight then
+                self.vel.x = self.vel.x + delta * 0.1
+                xVelLimit = 6
+                self.fric.x = frictionRunningFastX
+            end
+        elseif self.isDucking then
+            if math.abs(self.vel.x) < 2 then
+                self.fric.x = 0.2
+                xVelLimit = 3
+                image_speed = 0.8
+            else
+                self.vel.x = self.vel.x * 0.8
+                if self.vel.x < 0.5 then self.vel.x = 0 end
+                self.fric.x = 0.2
+                xVelLimit = 3
+                image_speed = 0.8
+            end
+        else
+            if not self.isOnGround then
+                if dead or stunned then
+                    self.fric.x = 1.0
+                else
+                    self.fric.x = 0.8
+                end
+            else
+                self.fric.x = frictionRunningX
+            end
+        end
+    end
 
     -- Final calculations and movement
 
