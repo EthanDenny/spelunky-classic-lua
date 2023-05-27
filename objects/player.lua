@@ -62,12 +62,23 @@ local jumpTime = jumpTimeTotal
 local frictionRunningX = 0.6
 local frictionRunningFastX = 0.98
 
+-- Sprites
+
+local sLookLeft = love.graphics.newImage("sprites/PlayerLook.png")
+local sLookRun = love.graphics.newImage("sprites/PlayerLookRun.png")
+local sDuckLeft = love.graphics.newImage("sprites/PlayerDuck.png")
+local sCrawlLeft = love.graphics.newImage("sprites/PlayerCrawl.png")
+local sJumpLeft = love.graphics.newImage("sprites/PlayerJump.png")
+local sFallLeft = love.graphics.newImage("sprites/PlayerFall.png")
+local sStandLeft = love.graphics.newImage("sprites/PlayerStand.png")
+local sRunLeft = love.graphics.newImage("sprites/PlayerRun.png")
+
 -- Player
 
 Player = class(
     Solid,
     {
-        sprite=love.graphics.newImage("sprites/player.png"),
+        sprite=sStandLeft,
         width=16,
         height=16,
         x=160,
@@ -301,6 +312,7 @@ function Player:update(delta)
     if approximatelyZero(self.vel.y) then self.vel.y = 0 end
 
     self:moveTo(delta)
+    self:characterSprite()
 
     resetKeyPresses()
 end
@@ -330,6 +342,34 @@ function Player:moveTo(delta)
         for i=0, yVelInteger do
             if self:isColBottom(delta) then break end
             self.y = self.y + delta
+        end
+    end
+end
+
+function Player:characterSprite()
+    if self.isLookingUp then
+        if self.vel.x == 0 then
+            self:setSprite(sLookLeft)
+        else
+            self:setSprite(sLookRun)
+        end
+    elseif self.isDucking then
+        if self.vel.x == 0 then
+            self:setSprite(sDuckLeft)
+        else
+            self:setSprite(sCrawlLeft)
+        end
+    elseif not self.isOnGround then
+        if self.isJumping then
+            self:setSprite(sJumpLeft)
+        else
+            self:setSprite(sFallLeft)
+        end
+    else
+        if self.vel.x == 0 then
+            self:setSprite(sStandLeft)
+        else
+            self:setSprite(sRunLeft)
         end
     end
 end
