@@ -1,2 +1,3 @@
-require "objects/player"
-require "objects/block"
+require("spriteObject")
+require("player")
+require("block")
