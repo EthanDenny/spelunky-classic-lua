@@ -1,48 +1,27 @@
-core = {}
+local Concord = require("concord")
 
--- Object class
+Core = {}
+Core.world = Concord.world()
 
-Object = {}
+-- Components
 
-objectList = {} -- Table of Object refs
+Concord.component("pos", function(c, x, y)
+    c.x = x or 0
+    c.y = y or 0
+end)
 
-function Object:new(o, is_class)
-    o = o or {}
-    setmetatable(o, self)
-    self.__index = self
-
-    if not is_class then
-        table.insert(objectList, o)
-    end
-    
-    return o
-end
-
-function class(inherit, props)
-    return inherit:new(props, true)
-end
-
--- Per-frame functions
-
-function core:update(delta)
-    for _, obj in pairs(objectList) do
-        if obj.update then obj:update(delta) end
-    end
-end
-
-function core:draw()
-    for _, obj in pairs(objectList) do
-        if obj.draw then obj:draw() end
-    end
-end
+Concord.component("size", function(c, x, y)
+    c.x = x or 0
+    c.y = y or 0
+end)
 
 -- Helper functions
 
-function approximatelyZero(value)
+function Core.approximatelyZero(value)
     return math.abs(value) < 0.1
 end
 
-function clamp(value, bound)
+function Core.clamp(value, bound)
     if value > bound then
         return bound
     elseif value < -bound then
@@ -51,3 +30,7 @@ function clamp(value, bound)
         return value
     end
 end
+
+-- Return
+
+return Core

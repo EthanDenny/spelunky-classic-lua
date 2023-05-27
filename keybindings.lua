@@ -14,3 +14,5 @@ keybinds = {
 
     purchase = "p"
 }
+
+return keybinds
