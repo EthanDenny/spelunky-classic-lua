@@ -74,7 +74,7 @@ Concord.component("playerState", function(c)
     c.hanging = false
 end)
 
-local playerSprite = love.graphics.newImage("sprites/player.png")
+local playerSprite = love.graphics.newImage("sprites/playerStand.png")
 
 function playerAssemble(e, x, y)
     e
