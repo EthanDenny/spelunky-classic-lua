@@ -8,11 +8,13 @@ end)
 Concord.component("animatedSprite", function(c, sheet, frameCount, speed)
     c.sheet = sheet
     c.frameCount = frameCount or 1
+    c.frameWidth = sheet:getWidth() / frameCount
+    c.frameHeight = sheet:getHeight()
     c.frameQuad = love.graphics.newQuad(
         0,
         0,
-        sheet:getWidth() / frameCount,
-        sheet:getHeight(),
+        c.frameWidth,
+        c.frameHeight,
         sheet
     )
     c.speed = speed or 1
@@ -27,37 +29,35 @@ Concord.component("orientation", function(c, flipped, mirrored)
 end)
 
 local DrawSystem = Concord.system({
+    fullPool = {"sprite", "animatedSprite", "pos", "size"},
     spritePool = {"sprite", "pos", "size"},
     animatedPool = {"animatedSprite", "pos", "size"}
 })
 
 function DrawSystem:update(delta)
     for _, e in ipairs(self.animatedPool) do
-        if e.animatedSprite then
-            local frameWidth = e.animatedSprite.sheet:getWidth() / e.animatedSprite.frameCount
-            local frameHeight = e.animatedSprite.sheet:getHeight()
+        local s = e.animatedSprite
 
-            -- animatedSprite completes once per "e.sprite.speed" seconds
-            local frameDuration = 1 / e.animatedSprite.speed
+        -- FPS = 1 / speed; e.g. 0.4 = 12 FPS, 1 = 30 FPS
+        local frameDuration = 1 / s.speed
 
-            e.animatedSprite.frameTimer = e.animatedSprite.frameTimer + delta
+        s.frameTimer = s.frameTimer + delta
 
-            if e.animatedSprite.frameTimer >= frameDuration then
-                e.animatedSprite.frameTimer = e.animatedSprite.frameTimer - frameDuration
+        if s.frameTimer >= frameDuration then
+            s.frameTimer = s.frameTimer - frameDuration
 
-                e.animatedSprite.frameNumber = e.animatedSprite.frameNumber + 1
-                if e.animatedSprite.frameNumber >= e.animatedSprite.frameCount then
-                    e.animatedSprite.frameNumber = 0
-                end
-
-                e.animatedSprite.frameQuad = love.graphics.newQuad(
-                    e.animatedSprite.frameNumber * frameWidth,
-                    0,
-                    frameWidth,
-                    frameHeight,
-                    e.animatedSprite.sheet
-                )
+            s.frameNumber = s.frameNumber + 1
+            if s.frameNumber >= s.frameCount then
+                s.frameNumber = 0
             end
+
+            s.frameQuad = love.graphics.newQuad(
+                s.frameNumber * s.frameWidth,
+                0,
+                s.frameWidth,
+                s.frameHeight,
+                s.sheet
+            )
         end
     end
 end
@@ -101,6 +101,32 @@ function DrawSystem:draw()
             e.size.x / 2,
             e.size.y / 2
         )
+
+        if e.orientation then
+            love.graphics.draw(
+                e.animatedSprite.sheet,
+                e.animatedSprite.frameQuad,
+                math.floor(e.pos.x + 0.5),
+                math.floor(e.pos.y + 0.5),
+                e.orientation.rotation,
+                e.orientation.mirrored and -1 or 1,
+                e.orientation.flipped and -1 or 1,
+                e.size.x / 2,
+                e.size.y / 2
+            )
+        else
+            love.graphics.draw(
+                e.animatedSprite.sheet,
+                e.animatedSprite.frameQuad,
+                math.floor(e.pos.x + 0.5),
+                math.floor(e.pos.y + 0.5),
+                0,
+                1,
+                1,
+                e.size.x / 2,
+                e.size.y / 2
+            )
+        end
     end
 end
 
