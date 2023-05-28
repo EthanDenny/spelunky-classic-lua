@@ -16,12 +16,16 @@ function love.load()
     love.window.setMode(320 * SCREEN_SCALE, 240 * SCREEN_SCALE)
     love.graphics.setDefaultFilter("nearest")
     canvas = love.graphics.newCanvas(320, 240)
+
+    bg_image = love.graphics.newImage("sprites/caveBackground.png")
+    bg_image:setWrap("repeat", "repeat")
+    bg_quad = love.graphics.newQuad(0, 0, 320 * SCREEN_SCALE, 240 * SCREEN_SCALE, bg_image:getWidth(), bg_image:getHeight())
 end
 
 function love.draw()
     love.graphics.setCanvas(canvas)
-
-    love.graphics.clear(7/256, 12/256, 16/256, 1)
+    
+    love.graphics.draw(bg_image, bg_quad, 0, 0)
 
     Core.world:emit("draw")
 
