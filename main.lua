@@ -3,10 +3,11 @@ local Core = require("core")
 
 local PlayerSystem = require("player")
 local PhysicSystem = require("physics")
+local DrawSystem = require("spriteObject")
 
 require("block")
 
-Core.world:addSystems(PlayerSystem, PhysicSystem)
+Core.world:addSystems(PlayerSystem, PhysicSystem, DrawSystem)
 
 SCREEN_SCALE = 3
 

@@ -1,6 +1,6 @@
 local Concord = require("concord")
 local Collisions = require("collisions")
-local spriteObjectAssemble = require("spriteObject")
+local DrawSystem = require("spriteObject")
 
 -- Block assemblage
 
@@ -8,7 +8,9 @@ local blockSprite = love.graphics.newImage("sprites/block.png")
 
 function blockAssemble(e, x, y)
     e
-    :assemble(spriteObjectAssemble, blockSprite, x, y, 16, 16)
+    :give("sprite", blockSprite)
+    :give("pos", x, y)
+    :give("size", 16, 16)
     :give("collider", {x=16, y=16})
     :give("solid")
 end

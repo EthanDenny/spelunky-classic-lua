@@ -40,7 +40,7 @@ function Collisions.colLeft(e, pool, amount)
     e.pos.x = e.pos.x - amount
     col = Collisions.colliding(e, pool)
     e.pos.x = e.pos.x + amount
-    return col
+    return col ~= nil
 end
 
 function Collisions.colRight(e, pool, amount)
@@ -48,7 +48,7 @@ function Collisions.colRight(e, pool, amount)
     e.pos.x = e.pos.x + amount
     col = Collisions.colliding(e, pool)
     e.pos.x = e.pos.x - amount
-    return col
+    return col ~= nil
 end
 
 function Collisions.colTop(e, pool, amount)
@@ -56,7 +56,7 @@ function Collisions.colTop(e, pool, amount)
     e.pos.y = e.pos.y - amount
     col = Collisions.colliding(e, pool)
     e.pos.y = e.pos.y + amount
-    return col
+    return col ~= nil
 end
 
 function Collisions.colBottom(e, pool, amount)
@@ -64,7 +64,7 @@ function Collisions.colBottom(e, pool, amount)
     e.pos.y = e.pos.y + amount
     col = Collisions.colliding(e, pool)
     e.pos.y = e.pos.y - amount
-    return col
+    return col ~= nil
 end
 
 return Collisions

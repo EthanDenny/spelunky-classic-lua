@@ -1,8 +1,8 @@
 local Concord = require("concord")
 local Collisions = require("collisions")
-local spriteObjectAssemble = require("spriteObject")
+local DrawSystem = require("spriteObject")
 local keybinds = require("keybindings")
-require("physics")
+local PhysicSystem = require("physics")
 
 -- Inputs
 
@@ -60,6 +60,19 @@ local jumpTime = jumpTimeTotal
 local frictionRunningX = 0.6
 local frictionRunningFastX = 0.98
 
+-- Sprites
+
+local sLookLeft = love.graphics.newImage("sprites/PlayerLook.png")
+local sLookRun = love.graphics.newImage("sprites/PlayerLookRun.png")
+local sDuckLeft = love.graphics.newImage("sprites/PlayerDuck.png")
+local sCrawlLeft = love.graphics.newImage("sprites/PlayerCrawl.png")
+local sJumpLeft = love.graphics.newImage("sprites/PlayerJump.png")
+local sFallLeft = love.graphics.newImage("sprites/PlayerFall.png")
+local sStandLeft = love.graphics.newImage("sprites/PlayerStand.png")
+local sRunLeft = love.graphics.newImage("sprites/PlayerRun.png")
+
+local runAnimSpeed = 0.1
+
 -- Player
 
 Concord.component("playerState", function(c)
@@ -74,13 +87,14 @@ Concord.component("playerState", function(c)
     c.hanging = false
 end)
 
-local playerSprite = love.graphics.newImage("sprites/playerStand.png")
-
 function playerAssemble(e, x, y)
     e
-    :assemble(spriteObjectAssemble, playerSprite, x, y, 16, 16)
+    :give("animatedSprite", sRunLeft, 6, 0.4)
+    :give("pos", x, y)
+    :give("size", 16, 16)
+    :give("orientation")
     :give("collider", {x=10, y=16}, {x=3, y=0})
-    :give("vel", 1, 0, {x=16, y=10})
+    :give("vel", 0, 0, {x=16, y=10})
     :give("acc", 0, 0, {x=9, y=6})
     :give("fric")
     :give("playerState")
@@ -185,7 +199,6 @@ function PlayerSystem:update(delta)
 
         if not Collisions.colBottom(e, self.colPool) and e.playerState.onGround then
             e.playerState.onGround = false
-            e.playerState.jumping = false
             e.acc.y = e.acc.y + grav * delta
         end
 
@@ -233,7 +246,7 @@ function PlayerSystem:update(delta)
         end
 
         if e.vel.y > 0 and not e.playerState.onGround and not e.playerState.hanging then
-            e.playerState.jumping = true
+            e.playerState.jumping = false
             e.collider.size.y = 14
             e.collider.offset.y = 2
         else
@@ -275,7 +288,70 @@ function PlayerSystem:update(delta)
             end
         end
 
+        PlayerSystem:characterSprite(e)
         resetKeyPresses()
+    end
+end
+
+function PlayerSystem:characterSprite(e)
+    if e.playerState.onGround and not e.playerState.ducking then
+        e.animatedSprite.speed = math.abs(e.vel.x) * runAnimSpeed + 0.1;
+    end
+
+    if math.abs(e.vel.x) >= 4 then
+        e.animatedSprite.speed = 1
+        if e.playerState.onGround then
+            e.collider.size.x = 16
+            e.collider.offset.x = 0
+        else
+            e.collider.size.x = 10
+            e.collider.offset.x = 3
+        end
+    else
+        e.collider.size.x = 10
+        e.collider.offset.x = 3
+    end
+
+    if e.animatedSprite.speed > 1 then e.animatedSprite.speed = 1 end
+
+    oldSheet = e.animatedSprite.sheet
+
+    if e.playerState.lookingUp then
+        if e.vel.x == 0 then
+            PlayerSystem:changeAnimation(e, sLookLeft, 1)
+        else
+            PlayerSystem:changeAnimation(e, sLookRun, 6)
+        end
+    elseif e.playerState.ducking then
+        if e.vel.x == 0 then
+            PlayerSystem:changeAnimation(e, sDuckLeft, 1)
+        else
+            PlayerSystem:changeAnimation(e, sCrawlLeft, 10)
+        end
+    elseif not e.playerState.onGround then
+        if e.playerState.jumping then
+            PlayerSystem:changeAnimation(e, sJumpLeft, 1)
+        else
+            PlayerSystem:changeAnimation(e, sFallLeft, 1)
+        end
+    else
+        if e.vel.x == 0 then
+            PlayerSystem:changeAnimation(e, sStandLeft, 1)
+        else
+            PlayerSystem:changeAnimation(e, sRunLeft, 6)
+        end
+    end
+end
+
+function PlayerSystem:changeAnimation(e, sheet, frames)
+    if sheet ~= e.animatedSprite.sheet then
+        local speed = e.animatedSprite.speed
+
+        e
+        :remove("animatedSprite")
+        :give("animatedSprite", sheet, frames, speed)
+
+        e.animatedSprite.frameNumber = 0
     end
 end
 
