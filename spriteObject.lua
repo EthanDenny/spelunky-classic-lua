@@ -31,7 +31,9 @@ end)
 local DrawSystem = Concord.system({
     fullPool = {"sprite", "animatedSprite", "pos", "size"},
     spritePool = {"sprite", "pos", "size"},
-    animatedPool = {"animatedSprite", "pos", "size"}
+    animatedPool = {"animatedSprite", "pos", "size"},
+
+    colPool = {"pos", "collider"},
 })
 
 function DrawSystem:update(delta)
@@ -125,6 +127,20 @@ function DrawSystem:draw()
                 1,
                 e.size.x / 2,
                 e.size.y / 2
+            )
+        end
+    end
+
+    for _, e in ipairs(self.colPool) do
+        local show_collision_rectangles = false
+
+        if show_collision_rectangles then
+            love.graphics.rectangle(
+                "fill",
+                math.floor(e.pos.x + 0.5) + e.collider.offset.x,
+                math.floor(e.pos.y + 0.5) + e.collider.offset.y,
+                e.collider.size.x,
+                e.collider.size.y
             )
         end
     end
