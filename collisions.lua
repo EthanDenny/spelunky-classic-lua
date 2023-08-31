@@ -13,12 +13,12 @@ Collisions = {}
 
 function Collisions.colliding(e1, pool)
     for _, e2 in ipairs(pool) do
-        e1RealColPos = {
+        local e1RealColPos = {
             x = e1.pos.x + e1.collider.offset.x,
             y = e1.pos.y + e1.collider.offset.y
         }
 
-        e2RealColPos = {
+        local e2RealColPos = {
             x = e2.pos.x + e2.collider.offset.x,
             y = e2.pos.y + e2.collider.offset.y
         }
