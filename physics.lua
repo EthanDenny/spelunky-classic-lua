@@ -20,33 +20,64 @@ end)
 
 local PhysicSystem = Concord.system({
     pool = {"pos", "vel"},
+    accPool = {"pos", "vel", "acc"},
+    fricPool = {"pos", "vel", "fric"},
     colPool = {"pos", "collider", "solid"}
 })
 
 function PhysicSystem:update(delta)
-    for _, e in ipairs(self.pool) do
-        if e.acc then
-            if e.acc.limit then
-                e.acc.x = Core.clamp(e.acc.x, e.acc.limit.x)
-                e.acc.y = Core.clamp(e.acc.y, e.acc.limit.y)
-            end
-
-            e.vel.x = e.vel.x + e.acc.x
-            e.vel.y = e.vel.y + e.acc.y
-
-            e.acc.x = 0
-            e.acc.y = 0
+    for _, e in ipairs(self.accPool) do
+        if e.acc.limit then
+            e.acc.x = Core.clamp(e.acc.x, e.acc.limit.x)
+            e.acc.y = Core.clamp(e.acc.y, e.acc.limit.y)
         end
-        
-        if e.fric then
-            e.vel.x = e.vel.x * e.fric.x
-            e.vel.y = e.vel.y * e.fric.y
-        end
-        
+
+        e.vel.x = e.vel.x + e.acc.x
+        e.vel.y = e.vel.y + e.acc.y
+
         e.acc.x = 0
         e.acc.y = 0
+    end
+    
+    for _, e in ipairs(self.fricPool) do
+        e.vel.x = e.vel.x * e.fric.x
+        e.vel.y = e.vel.y * e.fric.y
+    end
 
-        if e.vel and e.vel.limit then
+    for _, e in ipairs(self.pool) do
+        if e.vel.limit then
+            e.vel.x = Core.clamp(e.vel.x, e.vel.limit.x)
+            e.vel.y = Core.clamp(e.vel.y, e.vel.limit.y)
+        end
+        
+        if Core.approximatelyZero(e.vel.x) then e.vel.x = 0 end
+        if Core.approximatelyZero(e.vel.y) then e.vel.y = 0 end
+        
+        move(e, self.colPool, delta)
+    end
+end
+
+function PhysicSystem:update(delta)
+    for _, e in ipairs(self.accPool) do
+        if e.acc.limit then
+            e.acc.x = Core.clamp(e.acc.x, e.acc.limit.x)
+            e.acc.y = Core.clamp(e.acc.y, e.acc.limit.y)
+        end
+
+        e.vel.x = e.vel.x + e.acc.x
+        e.vel.y = e.vel.y + e.acc.y
+
+        e.acc.x = 0
+        e.acc.y = 0
+    end
+    
+    for _, e in ipairs(self.fricPool) do
+        e.vel.x = e.vel.x * e.fric.x
+        e.vel.y = e.vel.y * e.fric.y
+    end
+
+    for _, e in ipairs(self.pool) do
+        if e.vel.limit then
             e.vel.x = Core.clamp(e.vel.x, e.vel.limit.x)
             e.vel.y = Core.clamp(e.vel.y, e.vel.limit.y)
         end
