@@ -31,3 +31,9 @@ blockInstance:assemble(blockAssemble, 152, 184)
 
 blockInstance = Concord.entity(Core.world)
 blockInstance:assemble(blockAssemble, 168, 184)
+
+blockInstance = Concord.entity(Core.world)
+blockInstance:assemble(blockAssemble, 152, 168)
+
+blockInstance = Concord.entity(Core.world)
+blockInstance:assemble(blockAssemble, 168, 168)

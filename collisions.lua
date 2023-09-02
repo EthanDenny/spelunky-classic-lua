@@ -16,6 +16,24 @@ Collisions = {}
     with any of the objects in the pool
 ]]--
 
+function Collisions.colPoint(x, y, pool)
+    for _, e in ipairs(pool) do
+        local eRealColPos = {
+            x = e.pos.x - e.size.x / 2 + e.collider.offset.x,
+            y = e.pos.y - e.size.y / 2 + e.collider.offset.y
+        }
+
+        if (x < eRealColPos.x + e.collider.size.x and
+            y < eRealColPos.y + e.collider.size.y and
+            x > eRealColPos.x and
+            y > eRealColPos.y) then
+            return true
+        end
+    end
+
+    return false
+end
+
 function Collisions.colliding(e1, pool)
     for _, e2 in ipairs(pool) do
         local e1RealColPos = {
@@ -23,16 +41,16 @@ function Collisions.colliding(e1, pool)
             y = e1.pos.y - e1.size.y / 2 + e1.collider.offset.y
         }
 
-        local e2RealColPos = {
+        local eRealColPos = {
             x = e2.pos.x - e2.size.x / 2 + e2.collider.offset.x,
             y = e2.pos.y - e2.size.y / 2 + e2.collider.offset.y
         }
 
         if (e1 ~= e2 and
-            e1RealColPos.x < e2RealColPos.x + e2.collider.size.x and
-            e1RealColPos.y < e2RealColPos.y + e2.collider.size.y and
-            e1RealColPos.x + e1.collider.size.x > e2RealColPos.x and
-            e1RealColPos.y + e1.collider.size.y > e2RealColPos.y) then
+            e1RealColPos.x < eRealColPos.x + e2.collider.size.x and
+            e1RealColPos.y < eRealColPos.y + e2.collider.size.y and
+            e1RealColPos.x + e1.collider.size.x > eRealColPos.x and
+            e1RealColPos.y + e1.collider.size.y > eRealColPos.y) then
             return e2
         end
     end

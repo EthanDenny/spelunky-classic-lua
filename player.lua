@@ -59,6 +59,8 @@ local initialJumpAcc = -2
 local jumpTimeTotal = 10
 local jumpTime = jumpTimeTotal
 
+local hangCount = 0
+
 local frictionRunningX = 0.6
 local frictionRunningFastX = 0.98
 
@@ -68,6 +70,7 @@ local sLookLeft = love.graphics.newImage("sprites/PlayerLook.png")
 local sLookRun = love.graphics.newImage("sprites/PlayerLookRun.png")
 local sDuckLeft = love.graphics.newImage("sprites/PlayerDuck.png")
 local sCrawlLeft = love.graphics.newImage("sprites/PlayerCrawl.png")
+local sHangLeft = love.graphics.newImage("sprites/PlayerHang.png")
 local sJumpLeft = love.graphics.newImage("sprites/PlayerJump.png")
 local sFallLeft = love.graphics.newImage("sprites/PlayerFall.png")
 local sStandLeft = love.graphics.newImage("sprites/PlayerStand.png")
@@ -256,6 +259,92 @@ function PlayerSystem:update(delta)
             e.collider.offset.y = 0
         end
 
+        -- Hanging
+        if (hangCount == 0 and
+
+            e.pos.y > 16 and
+            not e.playerState.onGround and
+            not Collisions.colPoint(e.pos.x, e.pos.y+9, self.colPool)) then
+        
+            if (kRight and
+                Collisions.colRight(e, self.colPool) and (
+                    Collisions.colPoint(e.pos.x+9, e.pos.y-5, self.colPool) or
+                    Collisions.colPoint(e.pos.x+9, e.pos.y-6, self.colPool)
+                ) and
+                not Collisions.colPoint(e.pos.x+9, e.pos.y-9, self.colPool)) then
+
+                e.playerState.hanging = true
+                
+                -- Snap to ledge
+                e.pos.y = Core.round(e.pos.y / 8) * 8
+
+                e.vel.y = 0
+                e.acc.y = 0
+                grav = 0
+            elseif (kLeft and
+                Collisions.colLeft(e, self.colPool) and (
+                    Collisions.colPoint(e.pos.x-9, e.pos.y-5, self.colPool) or
+                    Collisions.colPoint(e.pos.x-9, e.pos.y-6, self.colPool)
+                ) and
+                not Collisions.colPoint(e.pos.x-9, e.pos.y-9, self.colPool)) then
+
+                e.playerState.hanging = true
+                
+                -- Snap to ledge
+                e.pos.y = Core.round(e.pos.y / 8) * 8
+
+                e.vel.y = 0
+                e.acc.y = 0
+                grav = 0
+            end
+        end
+
+        if hangCount > 0 then
+            hangCount = hangCount - 1
+        end
+
+        if e.playerState.hanging then
+            kJumped = false
+            
+            if kJumpPressed then
+                grav = gravNorm
+                e.playerState.hanging = false
+
+                if kDown then
+                    e.playerState.jumping = false
+                    e.acc.y = e.acc.y - grav
+                    hangCount = 5
+                else
+                    if ((e.orientation.mirrored and kLeft) or (not e.orientation.mirrored and kRight)) then
+                        e.playerState.jumping = false
+                        e.acc.y = e.acc.y - grav
+                    else
+                        e.playerState.jumping = true
+                        e.acc.y = e.acc.y + initialJumpAcc * 2
+
+                        if e.orientation.mirrored then
+                            e.pos.x = e.pos.x - 2
+                        else
+                            e.pos.x = e.pos.x + 2
+                        end
+                    end
+                end
+                
+                hangCount = 3
+            end
+            
+            if ((not e.orientation.mirrored and not Collisions.colLeft(e, self.colPool, 2)) or
+                (e.orientation.mirrored and not Collisions.colRight(e, self.colPool, 2))) then
+                grav = gravNorm
+                e.playerState.hanging = false
+                e.playerState.jumping = false
+                e.acc.y = e.acc.y - grav
+                hangCount = 4
+            end
+        else
+            grav = gravNorm
+        end
+
         -- Calculate friction
 
         if not e.playerState.climbing then
@@ -297,7 +386,7 @@ end
 
 function PlayerSystem:characterSprite(e)
     if e.playerState.onGround and not e.playerState.ducking then
-        e.animatedSprite.speed = math.abs(e.vel.x) * runAnimSpeed + 0.1;
+        e.animatedSprite.speed = math.abs(e.vel.x) * runAnimSpeed + 0.1
     end
 
     if math.abs(e.vel.x) >= 4 then
@@ -331,7 +420,9 @@ function PlayerSystem:characterSprite(e)
             PlayerSystem:changeAnimation(e, sCrawlLeft, 10)
         end
     elseif not e.playerState.onGround then
-        if e.playerState.jumping then
+        if e.playerState.hanging then
+            PlayerSystem:changeAnimation(e, sHangLeft, 1)
+        elseif e.playerState.jumping then
             PlayerSystem:changeAnimation(e, sJumpLeft, 1)
         else
             PlayerSystem:changeAnimation(e, sFallLeft, 1)
@@ -358,6 +449,6 @@ function PlayerSystem:changeAnimation(e, sheet, frames)
 end
 
 local player = Concord.entity(Core.world)
-player:assemble(playerAssemble, 160, 168)
+player:assemble(playerAssemble, 160, 100)
 
 return PlayerSystem

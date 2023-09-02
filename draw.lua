@@ -132,6 +132,19 @@ function DrawSystem:draw()
                 e.size.y / 2
             )
         end
+        
+        --[[
+            drawTestPoint(e.pos.x + 9, e.pos.y - 5, self.colPool, false)
+            drawTestPoint(e.pos.x - 9, e.pos.y - 5, self.colPool, false)
+
+            drawTestPoint(e.pos.x + 9, e.pos.y - 6, self.colPool, false)
+            drawTestPoint(e.pos.x - 9, e.pos.y - 6, self.colPool, false)
+
+            drawTestPoint(e.pos.x + 9, e.pos.y - 9, self.colPool, true)
+            drawTestPoint(e.pos.x - 9, e.pos.y - 9, self.colPool, true)
+
+            drawTestPoint(e.pos.x, e.pos.y + 9, self.colPool, true)
+        ]]
     end
 
     for _, e in ipairs(self.colPool) do
@@ -147,6 +160,22 @@ function DrawSystem:draw()
             )
         end
     end
+end
+
+function drawTestPoint(x, y, pool, invert)
+    if Collisions.colPoint(x, y, pool) then
+        if invert then
+            love.graphics.setColor(0, 0, 1)
+        else
+            love.graphics.setColor(0, 1, 0)
+        end
+    else
+        love.graphics.setColor(1, 0, 0)
+    end
+
+    love.graphics.points(x, y)
+
+    love.graphics.setColor(1, 1, 1)
 end
 
 return DrawSystem
