@@ -178,10 +178,12 @@ function PlayerPhysicsSystem:update(delta)
                     e.vel.x = e.vel.x - delta * 0.1
                     e.vel.limit.x = 6
                     e.fric.x = e.pPhysics.frictionrunningFastX
+                    e.pState.ducking = false
                 elseif e.pInputs.right then
                     e.vel.x = e.vel.x + delta * 0.1
                     e.vel.limit.x = 6
                     e.fric.x = e.pPhysics.frictionrunningFastX
+                    e.pState.ducking = false
                 end
             elseif e.pState.ducking then
                 e.fric.x = 0.2
