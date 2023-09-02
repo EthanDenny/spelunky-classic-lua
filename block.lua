@@ -1,6 +1,6 @@
 local Concord = require("concord")
 local Collisions = require("collisions")
-local DrawSystem = require("spriteObject")
+local DrawSystem = require("draw")
 
 -- Block assemblage
 

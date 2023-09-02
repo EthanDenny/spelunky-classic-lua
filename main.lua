@@ -3,7 +3,7 @@ local Core = require("core")
 
 local PlayerSystem = require("player")
 local PhysicSystem = require("physics")
-local DrawSystem = require("spriteObject")
+local DrawSystem = require("draw")
 
 require("block")
 
