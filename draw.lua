@@ -1,7 +1,7 @@
 local Concord = require("concord")
 local Core = require("core")
 
-Concord.component("sprite", function(c, sheet, frameCount)
+Concord.component("sprite", function(c, sheet)
     c.sheet = sheet
 end)
 

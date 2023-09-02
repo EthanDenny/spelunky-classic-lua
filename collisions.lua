@@ -1,10 +1,8 @@
 local Concord = require("concord")
 
-Concord.component("collider", function(c, size, offset, layer, mask)
+Concord.component("collider", function(c, size, offset)
     c.size = size or {x=0, y=0}
     c.offset = offset or {x=0, y=0}
-    c.layer = layer or 0
-    c.mask = mask or {true}
 end)
 
 Concord.component("solid")
