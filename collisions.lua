@@ -19,13 +19,13 @@ Collisions = {}
 function Collisions.colliding(e1, pool)
     for _, e2 in ipairs(pool) do
         local e1RealColPos = {
-            x = e1.pos.x + e1.collider.offset.x,
-            y = e1.pos.y + e1.collider.offset.y
+            x = e1.pos.x - e1.size.x / 2 + e1.collider.offset.x,
+            y = e1.pos.y - e1.size.y / 2 + e1.collider.offset.y
         }
 
         local e2RealColPos = {
-            x = e2.pos.x + e2.collider.offset.x,
-            y = e2.pos.y + e2.collider.offset.y
+            x = e2.pos.x - e2.size.x / 2 + e2.collider.offset.x,
+            y = e2.pos.y - e2.size.y / 2 + e2.collider.offset.y
         }
 
         if (e1 ~= e2 and

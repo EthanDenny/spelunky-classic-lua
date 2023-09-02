@@ -140,8 +140,8 @@ function DrawSystem:draw()
         if show_collision_rectangles then
             love.graphics.rectangle(
                 "fill",
-                math.floor(e.pos.x + 0.5) + e.collider.offset.x,
-                math.floor(e.pos.y + 0.5) + e.collider.offset.y,
+                math.floor(e.pos.x + 0.5) - e.size.x / 2 + e.collider.offset.x,
+                math.floor(e.pos.y + 0.5) - e.size.y / 2 + e.collider.offset.y,
                 e.collider.size.x,
                 e.collider.size.y
             )
