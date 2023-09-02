@@ -31,6 +31,10 @@ function Core.clamp(value, bound)
     end
 end
 
+function Core.round(v)
+    return math.floor(v + 0.5)
+end
+
 -- Return
 
 return Core

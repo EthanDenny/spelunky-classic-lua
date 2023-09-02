@@ -72,8 +72,8 @@ function DrawSystem:draw()
         if e.orientation then
             love.graphics.draw(
                 e.sprite.sheet,
-                math.floor(e.pos.x + 0.5),
-                math.floor(e.pos.y + 0.5),
+                Core.round(e.pos.x),
+                Core.round(e.pos.y),
                 e.orientation.rotation,
                 e.orientation.mirrored and -1 or 1,
                 e.orientation.flipped and -1 or 1,
@@ -83,8 +83,8 @@ function DrawSystem:draw()
         else
             love.graphics.draw(
                 e.sprite.sheet,
-                math.floor(e.pos.x + 0.5),
-                math.floor(e.pos.y + 0.5),
+                Core.round(e.pos.x),
+                Core.round(e.pos.y),
                 0,
                 1,
                 1,
@@ -98,8 +98,8 @@ function DrawSystem:draw()
         love.graphics.draw(
             e.animatedSprite.sheet,
             e.animatedSprite.frameQuad,
-            math.floor(e.pos.x + 0.5),
-            math.floor(e.pos.y + 0.5),
+            Core.round(e.pos.x),
+            Core.round(e.pos.y),
             e.orientation.rotation,
             e.orientation.mirrored and -1 or 1,
             e.orientation.flipped and -1 or 1,
@@ -111,8 +111,8 @@ function DrawSystem:draw()
             love.graphics.draw(
                 e.animatedSprite.sheet,
                 e.animatedSprite.frameQuad,
-                math.floor(e.pos.x + 0.5),
-                math.floor(e.pos.y + 0.5),
+                Core.round(e.pos.x),
+                Core.round(e.pos.y),
                 e.orientation.rotation,
                 e.orientation.mirrored and -1 or 1,
                 e.orientation.flipped and -1 or 1,
@@ -123,8 +123,8 @@ function DrawSystem:draw()
             love.graphics.draw(
                 e.animatedSprite.sheet,
                 e.animatedSprite.frameQuad,
-                math.floor(e.pos.x + 0.5),
-                math.floor(e.pos.y + 0.5),
+                Core.round(e.pos.x),
+                Core.round(e.pos.y),
                 0,
                 1,
                 1,
@@ -140,8 +140,8 @@ function DrawSystem:draw()
         if show_collision_rectangles then
             love.graphics.rectangle(
                 "fill",
-                math.floor(e.pos.x + 0.5) - e.size.x / 2 + e.collider.offset.x,
-                math.floor(e.pos.y + 0.5) - e.size.y / 2 + e.collider.offset.y,
+                Core.round(e.pos.x) - e.size.x / 2 + e.collider.offset.x,
+                Core.round(e.pos.y) - e.size.y / 2 + e.collider.offset.y,
                 e.collider.size.x,
                 e.collider.size.y
             )
