@@ -193,7 +193,7 @@ function PlayerSystem:update(delta)
             e.acc.y = e.acc.y + gravityIntensity * delta
         end
 
-        if Collisions.colBottom(e, self.colPool) then
+        if Collisions.colBottom(e, self.colPool, 0.1) then -- Use a small interval to prevent false positives
             e.playerState.onGround = true
             e.vel.y = 0
             e.acc.y = 0
