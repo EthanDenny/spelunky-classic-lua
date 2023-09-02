@@ -178,4 +178,4 @@ function drawTestPoint(x, y, pool, invert)
     love.graphics.setColor(1, 1, 1)
 end
 
-return DrawSystem
+Core.world:addSystems(DrawSystem)

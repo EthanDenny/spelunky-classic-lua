@@ -1,16 +1,10 @@
 local Concord = require("concord")
 local Core = require("core")
 
--- This is mostly pretty obvious
-local PlayerSystem = require("player")
-local PhysicSystem = require("physics")
-local DrawSystem = require("draw")
-
--- Need this for some janky world spawning stuff
--- Not sure why
-require("block") 
-
-Core.world:addSystems(PlayerSystem, PhysicSystem, DrawSystem)
+require("player")
+require("physics")
+require("draw")
+require("block")
 
 SCREEN_SCALE = 3
 

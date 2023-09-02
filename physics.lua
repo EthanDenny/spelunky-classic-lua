@@ -127,4 +127,4 @@ function move(e, pool, delta)
     end
 end
 
-return PhysicSystem
+Core.world:addSystems(PhysicSystem)
