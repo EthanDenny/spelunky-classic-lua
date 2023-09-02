@@ -1,3 +1,6 @@
+-- We be drawing pixels baby
+-- Nothing super crazy here
+
 local Concord = require("concord")
 local Core = require("core")
 
@@ -24,8 +27,8 @@ end)
 
 Concord.component("orientation", function(c, flipped, mirrored)
     c.rotation = rotation or 0
-    c.flipped = flipped or false
-    c.mirrored = mirrored or false
+    c.flipped = flipped or false -- vertical
+    c.mirrored = mirrored or false -- horizontal
 end)
 
 local DrawSystem = Concord.system({

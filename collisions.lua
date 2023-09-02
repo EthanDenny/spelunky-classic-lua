@@ -1,5 +1,7 @@
 local Concord = require("concord")
 
+-- Components
+
 Concord.component("collider", function(c, size, offset)
     c.size = size or {x=0, y=0}
     c.offset = offset or {x=0, y=0}
@@ -8,6 +10,11 @@ end)
 Concord.component("solid")
 
 Collisions = {}
+
+--[[
+    Given an entity and a pool of objects, determine if the entity is colliding
+    with any of the objects in the pool
+]]--
 
 function Collisions.colliding(e1, pool)
     for _, e2 in ipairs(pool) do
@@ -32,6 +39,12 @@ function Collisions.colliding(e1, pool)
 
     return nil
 end
+
+--[[
+    Given an entity, a pool of objects, and an amount, determine if moving the
+    entity by amount pixels in the given direction would result in a collision
+    with any of the objects in the pool
+]]--
 
 function Collisions.colLeft(e, pool, amount)
     amount = amount or 1

@@ -1,16 +1,20 @@
 local Concord = require("concord")
 local Core = require("core")
 
+-- This is mostly pretty obvious
 local PlayerSystem = require("player")
 local PhysicSystem = require("physics")
 local DrawSystem = require("draw")
 
-require("block")
+-- Need this for some janky world spawning stuff
+-- Not sure why
+require("block") 
 
 Core.world:addSystems(PlayerSystem, PhysicSystem, DrawSystem)
 
 SCREEN_SCALE = 3
 
+-- Pretty basic stuff, no ECS here
 function love.load()
     love.window.setTitle("Spelunky Classic LÖVE")
     love.window.setMode(320 * SCREEN_SCALE, 240 * SCREEN_SCALE)
@@ -22,6 +26,7 @@ function love.load()
     bg_quad = love.graphics.newQuad(0, 0, 320 * SCREEN_SCALE, 240 * SCREEN_SCALE, bg_image:getWidth(), bg_image:getHeight())
 end
 
+-- Standard stuff again
 function love.draw()
     love.graphics.setCanvas(canvas)
     
@@ -33,6 +38,7 @@ function love.draw()
     love.graphics.draw(canvas, 0, 0, 0, SCREEN_SCALE, SCREEN_SCALE)
 end
 
+-- Multiplying by 30 so that the physics code I adapted works much more nicely
 function love.update(dt)
     Core.world:emit("update", dt * 30)
 end

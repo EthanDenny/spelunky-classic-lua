@@ -1,3 +1,5 @@
+-- May whatever gods exist have mercy on your soul as you enter this file
+
 local Concord = require("concord")
 local Collisions = require("collisions")
 local DrawSystem = require("draw")

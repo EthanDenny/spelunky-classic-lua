@@ -1,3 +1,7 @@
+-- Most of this file is nitpicky movement stuff
+-- move() is probably the only interesting function
+-- I wish I had a better way to do collisions in it
+
 local Concord = require("concord")
 local Core = require("core")
 
