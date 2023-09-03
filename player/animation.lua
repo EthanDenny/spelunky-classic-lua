@@ -10,8 +10,6 @@ local sFallLeft = love.graphics.newImage("sprites/PlayerFall.png")
 local sStandLeft = love.graphics.newImage("sprites/PlayerStand.png")
 local sRunLeft = love.graphics.newImage("sprites/PlayerRun.png")
 
-local runAnimSpeed = 0.1
-
 local PlayerAnimSystem = Concord.system({
     pool = {"pState"},
 })
@@ -22,7 +20,7 @@ function PlayerAnimSystem:update(delta)
             if e.pState.ducking then
                 e.animatedSprite.speed = 0.8
             else
-                e.animatedSprite.speed = math.abs(e.vel.x) * runAnimSpeed + 0.1
+                e.animatedSprite.speed = (math.abs(e.vel.x) + 1) / 10
             end
         end
 
@@ -40,9 +38,9 @@ function PlayerAnimSystem:update(delta)
             e.collider.offset.x = 3
         end
 
-        if e.animatedSprite.speed > 1 then e.animatedSprite.speed = 1 end
-
-        oldSheet = e.animatedSprite.sheet
+        if e.animatedSprite.speed > 1 then
+            e.animatedSprite.speed = 1
+        end
 
         if e.pState.lookingUp then
             if e.vel.x == 0 then
