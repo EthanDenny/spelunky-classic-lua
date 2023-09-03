@@ -3,6 +3,7 @@
 
 local Concord = require("concord")
 local Core = require("core")
+local Collisions = require("collisions")
 
 Concord.component("sprite", function(c, sheet)
     c.sheet = sheet
