@@ -18,8 +18,12 @@ local PlayerAnimSystem = Concord.system({
 
 function PlayerAnimSystem:update(delta)
     for _, e in ipairs(self.pool) do
-        if e.pState.onGround and not e.pState.ducking then
-            e.animatedSprite.speed = math.abs(e.vel.x) * runAnimSpeed + 0.1
+        if e.pState.onGround then
+            if e.pState.ducking then
+                e.animatedSprite.speed = 0.8
+            else
+                e.animatedSprite.speed = math.abs(e.vel.x) * runAnimSpeed + 0.1
+            end
         end
 
         if math.abs(e.vel.x) >= 4 then

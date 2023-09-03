@@ -169,7 +169,6 @@ function PlayerPhysicsSystem:update(delta)
             elseif e.pState.ducking then
                 e.fric.x = 0.2
                 e.vel.limit.x = 3
-                image_speed = 0.8
 
                 if math.abs(e.vel.x) >= 2 then
                     e.vel.x = e.vel.x * 0.8
