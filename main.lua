@@ -5,6 +5,7 @@ require("player")
 require("physics")
 require("draw")
 require("block")
+require("enemies")
 
 SCREEN_SCALE = 3
 
