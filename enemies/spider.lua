@@ -6,7 +6,7 @@ local Player = require("player")
 
 local sSpider = love.graphics.newImage("sprites/Spider.png")
 
-function spiderAssemble(e, x, y)
+local function spiderAssemble(e, x, y)
     e
     :give("animatedSprite", sSpider, 4, 0.4)
     :give("pos", x, y)
@@ -91,7 +91,7 @@ function SpiderAISystem:update(delta)
                 else
                     e.vel.x = 2.5
                 end
-                
+
                 if math.random(1, 4) == 1 then
                     e.spider.state = "IDLE";
                     e.vel.x = 0
@@ -99,7 +99,7 @@ function SpiderAISystem:update(delta)
                 end
             end
         elseif e.spider.state ~= "DROWNED" then
-            e.spider.state = IDLE;
+            e.spider.state = "IDLE";
         end
 
         if Collisions.colTop(e, self.colPool) then

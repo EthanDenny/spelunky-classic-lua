@@ -9,28 +9,32 @@ require("enemies")
 
 SCREEN_SCALE = 3
 
+Canvas = nil
+BGImage = nil
+BGQuad = nil
+
 -- Pretty basic stuff, no ECS here
 function love.load()
     love.window.setTitle("Spelunky Classic LÖVE")
     love.window.setMode(320 * SCREEN_SCALE, 240 * SCREEN_SCALE)
-    love.graphics.setDefaultFilter("nearest")
-    canvas = love.graphics.newCanvas(320, 240)
+    love.graphics.setDefaultFilter("nearest", "nearest")
+    Canvas = love.graphics.newCanvas(320, 240)
 
-    bg_image = love.graphics.newImage("sprites/caveBackground.png")
-    bg_image:setWrap("repeat", "repeat")
-    bg_quad = love.graphics.newQuad(0, 0, 320 * SCREEN_SCALE, 240 * SCREEN_SCALE, bg_image:getWidth(), bg_image:getHeight())
+    BGImage = love.graphics.newImage("sprites/caveBackground.png")
+    BGImage:setWrap("repeat", "repeat")
+    BGQuad = love.graphics.newQuad(0, 0, 320 * SCREEN_SCALE, 240 * SCREEN_SCALE, BGImage:getWidth(), BGImage:getHeight())
 end
 
 -- Standard stuff again
 function love.draw()
-    love.graphics.setCanvas(canvas)
-    
-    love.graphics.draw(bg_image, bg_quad, 0, 0)
+    love.graphics.setCanvas(Canvas)
+
+    love.graphics.draw(BGImage, BGQuad, 0, 0)
 
     Core.world:emit("draw")
 
     love.graphics.setCanvas()
-    love.graphics.draw(canvas, 0, 0, 0, SCREEN_SCALE, SCREEN_SCALE)
+    love.graphics.draw(Canvas, 0, 0, 0, SCREEN_SCALE, SCREEN_SCALE)
 end
 
 -- Multiplying by 30 so that the physics code I adapted works much more nicely

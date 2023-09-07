@@ -26,7 +26,7 @@ Concord.component("animatedSprite", function(c, sheet, frameCount, speed)
     c.frameTimer = 0
 end)
 
-Concord.component("orientation", function(c, flipped, mirrored)
+Concord.component("orientation", function(c, rotation, flipped, mirrored)
     c.rotation = rotation or 0
     c.flipped = flipped or false -- vertical
     c.mirrored = mirrored or false -- horizontal

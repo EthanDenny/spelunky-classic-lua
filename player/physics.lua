@@ -17,20 +17,19 @@ Concord.component("pPhysics", function(c)
     c.grav = 1
     c.gravNorm = 1
     c.gravityIntensity = c.grav
-    
+
     c.runAcc = 3
-    
+
     c.initialJumpAcc = -2
     c.jumpTimeTotal = 10
     c.jumpTime = c.jumpTimeTotal
-    
+
     c.frictionrunningX = 0.6
     c.frictionrunningFastX = 0.98
 end)
 
---[[
-    MAIN SYSTEM
-]]
+Concord.component("dead")
+Concord.component("stunned")
 
 local PlayerPhysicsSystem = Concord.system({
     pool = {"pState"},
@@ -51,7 +50,7 @@ function PlayerPhysicsSystem:update(delta)
                 end
                 e.orientation.mirrored = false
             end
-        
+
             if e.pInputs.right and not e.pInputs.left then
                 if e.pInputs.rightPushedSteps > 2 and (e.orientation.mirrored or Core.approximatelyZero(e.vel.x)) then
                     e.acc.x = e.acc.x + e.pPhysics.runAcc
@@ -67,7 +66,7 @@ function PlayerPhysicsSystem:update(delta)
         -- Bouncing off solids
 
         if Collisions.colTop(e, self.colPool) then
-            if dead or stunned then
+            if e:has("dead") or e:has("stunned") then
                 e.vel.y = -e.vel.y * 0.8
             elseif not e.pState.onGround and e.pState.jumping then
                 e.vel.y = math.abs(e.vel.y * 0.3)
@@ -75,7 +74,7 @@ function PlayerPhysicsSystem:update(delta)
         end
 
         if (Collisions.colLeft(e, self.colPool) and not e.orientation.mirrored) or (Collisions.colRight(e, self.colPool) and e.orientation.mirrored) then
-            if dead or stunned then
+            if e:has("dead") or e:has("stunned") then
                 e.vel.x = -e.vel.x * 0.5
             else
                 e.vel.x = 0
@@ -175,7 +174,7 @@ function PlayerPhysicsSystem:update(delta)
                 end
             else
                 if not e.pState.onGround then
-                    if dead or stunned then
+                    if e:has("dead") or e:has("stunned") then
                         e.fric.x = 1.0
                     else
                         e.fric.x = 0.8
