@@ -1,4 +1,4 @@
-local keys = {
+return {
     left = "left",
     right = "right",
     up = "up",
@@ -14,5 +14,3 @@ local keys = {
 
     purchase = "p"
 }
-
-return keys

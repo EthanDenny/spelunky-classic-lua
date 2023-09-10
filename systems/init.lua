@@ -1,11 +1,7 @@
--- This could be significantly simplified, possibly as a loop in main?
+local files = love.filesystem.getDirectoryItems("systems")
 
-local PATH = (...):gsub('%.init$', '')
-
-require(PATH..".animation")
-require(PATH..".draw")
-require(PATH..".hang")
-require(PATH..".input")
-require(PATH..".physics")
-require(PATH..".player_physics")
-require(PATH..".spider")
+for _, file in pairs(files) do
+    if file ~= "init.lua" then
+        require("systems/"..file:sub(0, -5))
+    end
+end
