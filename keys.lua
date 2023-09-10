@@ -1,4 +1,4 @@
-keybinds = {
+local keys = {
     left = "left",
     right = "right",
     up = "up",
@@ -15,4 +15,4 @@ keybinds = {
     purchase = "p"
 }
 
-return keybinds
+return keys

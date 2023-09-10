@@ -3,40 +3,13 @@
 
 local Concord = require("concord")
 local Core = require("core")
-local Collisions = require("collisions")
 
-Concord.component("sprite", function(c, sheet)
-    c.sheet = sheet
-end)
-
-Concord.component("animatedSprite", function(c, sheet, frameCount, speed)
-    c.sheet = sheet
-    c.frameCount = frameCount or 1
-    c.frameWidth = sheet:getWidth() / frameCount
-    c.frameHeight = sheet:getHeight()
-    c.frameQuad = love.graphics.newQuad(
-        0,
-        0,
-        c.frameWidth,
-        c.frameHeight,
-        sheet
-    )
-    c.speed = speed or 1
-    c.frameNumber = 0
-    c.frameTimer = 0
-end)
-
-Concord.component("orientation", function(c, rotation, flipped, mirrored)
-    c.rotation = rotation or 0
-    c.flipped = flipped or false -- vertical
-    c.mirrored = mirrored or false -- horizontal
-end)
+require("components")
 
 local DrawSystem = Concord.system({
     fullPool = {"sprite", "animatedSprite", "pos", "size"},
     spritePool = {"sprite", "pos", "size"},
     animatedPool = {"animatedSprite", "pos", "size"},
-
     colPool = {"pos", "collider"},
 })
 
@@ -135,16 +108,16 @@ function DrawSystem:draw()
         end
         
         --[[
-            drawTestPoint(e.pos.x + 9, e.pos.y - 5, self.colPool, false)
-            drawTestPoint(e.pos.x - 9, e.pos.y - 5, self.colPool, false)
+            DrawSystem:drawTestPoint(e.pos.x + 9, e.pos.y - 5, self.colPool, false)
+            DrawSystem:drawTestPoint(e.pos.x - 9, e.pos.y - 5, self.colPool, false)
 
-            drawTestPoint(e.pos.x + 9, e.pos.y - 6, self.colPool, false)
-            drawTestPoint(e.pos.x - 9, e.pos.y - 6, self.colPool, false)
+            DrawSystem:drawTestPoint(e.pos.x + 9, e.pos.y - 6, self.colPool, false)
+            DrawSystem:drawTestPoint(e.pos.x - 9, e.pos.y - 6, self.colPool, false)
 
-            drawTestPoint(e.pos.x + 9, e.pos.y - 9, self.colPool, true)
-            drawTestPoint(e.pos.x - 9, e.pos.y - 9, self.colPool, true)
+            DrawSystem:drawTestPoint(e.pos.x + 9, e.pos.y - 9, self.colPool, true)
+            DrawSystem:drawTestPoint(e.pos.x - 9, e.pos.y - 9, self.colPool, true)
 
-            drawTestPoint(e.pos.x, e.pos.y + 9, self.colPool, true)
+            DrawSystem:drawTestPoint(e.pos.x, e.pos.y + 9, self.colPool, true)
         ]]
     end
 
@@ -163,7 +136,7 @@ function DrawSystem:draw()
     end
 end
 
-function drawTestPoint(x, y, pool, invert)
+function DrawSystem.drawTestPoint(x, y, pool, invert)
     if Collisions.colPoint(x, y, pool) then
         if invert then
             love.graphics.setColor(0, 0, 1)

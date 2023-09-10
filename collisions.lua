@@ -1,13 +1,4 @@
-local Concord = require("concord")
-
--- Components
-
-Concord.component("collider", function(c, size, offset)
-    c.size = size or {x=0, y=0}
-    c.offset = offset or {x=0, y=0}
-end)
-
-Concord.component("solid")
+-- Not a system, just helper functions
 
 Collisions = {}
 
@@ -67,7 +58,7 @@ end
 function Collisions.colLeft(e, pool, amount)
     amount = amount or 1
     e.pos.x = e.pos.x - amount
-    col = Collisions.colliding(e, pool)
+    local col = Collisions.colliding(e, pool)
     e.pos.x = e.pos.x + amount
     return col ~= nil
 end
@@ -75,7 +66,7 @@ end
 function Collisions.colRight(e, pool, amount)
     amount = amount or 1
     e.pos.x = e.pos.x + amount
-    col = Collisions.colliding(e, pool)
+    local col = Collisions.colliding(e, pool)
     e.pos.x = e.pos.x - amount
     return col ~= nil
 end
@@ -83,7 +74,7 @@ end
 function Collisions.colTop(e, pool, amount)
     amount = amount or 1
     e.pos.y = e.pos.y - amount
-    col = Collisions.colliding(e, pool)
+    local col = Collisions.colliding(e, pool)
     e.pos.y = e.pos.y + amount
     return col ~= nil
 end
@@ -91,7 +82,7 @@ end
 function Collisions.colBottom(e, pool, amount)
     amount = amount or 1
     e.pos.y = e.pos.y + amount
-    col = Collisions.colliding(e, pool)
+    local col = Collisions.colliding(e, pool)
     e.pos.y = e.pos.y - amount
     return col ~= nil
 end

@@ -3,18 +3,6 @@ local Concord = require("concord")
 Core = {}
 Core.world = Concord.world()
 
--- Components
-
-Concord.component("pos", function(c, x, y)
-    c.x = x or 0
-    c.y = y or 0
-end)
-
-Concord.component("size", function(c, x, y)
-    c.x = x or 0
-    c.y = y or 0
-end)
-
 -- Helper functions
 
 function Core.approximatelyZero(value)
