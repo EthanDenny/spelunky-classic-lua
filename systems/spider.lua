@@ -76,4 +76,4 @@ function SpiderAISystem:update(delta)
     end
 end
 
-Core.world:addSystems(SpiderAISystem)
+Core.world:addSystem(SpiderAISystem)

@@ -77,4 +77,4 @@ function PlayerAnimSystem:changeAnimation(e, sheet, frames)
     end
 end
 
-Core.world:addSystems(PlayerAnimSystem)
+Core.world:addSystem(PlayerAnimSystem)

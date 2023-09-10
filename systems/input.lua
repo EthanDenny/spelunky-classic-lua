@@ -76,4 +76,4 @@ function PlayerInputSystem:update(delta)
     end
 end
 
-Core.world:addSystems(PlayerInputSystem)
+Core.world:addSystem(PlayerInputSystem)

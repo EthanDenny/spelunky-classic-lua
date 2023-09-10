@@ -20,7 +20,7 @@ end
 
 Spider.spawn = function(x, y)
     local e = Concord.entity(Core.world)
-    return e:assemble(Spider.assemble, x or 50, y or 184)
+    return e:assemble(Spider.assemble, x, y)
 end
 
 return Spider

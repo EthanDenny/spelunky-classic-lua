@@ -23,6 +23,10 @@ function Core.round(v)
     return math.floor(v + 0.5)
 end
 
+function Core.lerp(a, b, t)
+    return a * (1 - t) + b * t
+end
+
 -- Return
 
 return Core

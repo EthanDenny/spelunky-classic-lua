@@ -16,7 +16,7 @@ end
 
 Block.spawn = function(x, y)
     local e = Concord.entity(Core.world)
-    return e:assemble(Block.assemble, x or 152, y or 184)
+    return e:assemble(Block.assemble, x, y)
 end
 
 return Block

@@ -96,4 +96,4 @@ function PlayerHangSystem:update(delta)
     end
 end
 
-Core.world:addSystems(PlayerHangSystem)
+Core.world:addSystem(PlayerHangSystem)

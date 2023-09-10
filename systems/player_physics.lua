@@ -1,5 +1,6 @@
 local Concord = require("concord")
 local Collisions = require("collisions")
+local Core = require("core")
 require("components")
 
 local PlayerPhysicsSystem = Concord.system({
@@ -166,4 +167,4 @@ function PlayerPhysicsSystem:update(delta)
     end
 end
 
-Core.world:addSystems(PlayerPhysicsSystem)
+Core.world:addSystem(PlayerPhysicsSystem)

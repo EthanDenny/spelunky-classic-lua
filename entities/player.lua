@@ -23,7 +23,7 @@ end
 
 Player.spawn = function(x, y)
     local e = Concord.entity(Core.world)
-    return e:assemble(Player.assemble, x or 160, y or 100)
+    return e:assemble(Player.assemble, x, y)
 end
 
 return Player

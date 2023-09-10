@@ -79,4 +79,4 @@ function PhysicSystem:move(e, pool, delta)
     end
 end
 
-Core.world:addSystems(PhysicSystem)
+Core.world:addSystem(PhysicSystem)
