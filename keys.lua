@@ -1,4 +1,4 @@
-keybinds = {
+return {
     left = "left",
     right = "right",
     up = "up",
@@ -14,5 +14,3 @@ keybinds = {
 
     purchase = "p"
 }
-
-return keybinds

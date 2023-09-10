@@ -1,43 +1,11 @@
 local Concord = require("concord")
-local Core = require("core")
-local DrawSystem = require("draw")
-local PhysicsSystem = require("physics")
-local Player = require("player")
-
-local sSpider = love.graphics.newImage("sprites/Spider.png")
-
-local function spiderAssemble(e, x, y)
-    e
-    :give("animatedSprite", sSpider, 4, 0.4)
-    :give("pos", x, y)
-    :give("size", 16, 16)
-    :give("orientation")
-    :give("collider", {x=14, y=11}, {x=1, y=5})
-    :give("vel", 0, 0, {x=16, y=10})
-    :give("fric")
-    :give("spider")
-end
-
-Concord.component("spider", function(c)
-    c.state = "IDLE"
-    c.stateTimer = 0
-    c.grav = 0.2
-end)
+require("components")
 
 local SpiderAISystem = Concord.system({
     pool = {"spider"},
-    playerPool = {"pState"},
+    playerPool = {"player"},
     colPool = {"pos", "collider", "solid"}
 })
-
-local spider = Concord.entity(Core.world)
-spider:assemble(spiderAssemble, 50, 184)
-
-local spider = Concord.entity(Core.world)
-spider:assemble(spiderAssemble, 50, 184)
-
-local spider = Concord.entity(Core.world)
-spider:assemble(spiderAssemble, 50, 184)
 
 function SpiderAISystem:update(delta)
     local player = nil
@@ -108,4 +76,4 @@ function SpiderAISystem:update(delta)
     end
 end
 
-return SpiderAISystem
+Core.world:addSystems(SpiderAISystem)
