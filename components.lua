@@ -152,5 +152,5 @@ end)
 ]]
 
 Concord.component("ladder")
-Concord.component("ladder_top")
+Concord.component("walkable")
 Concord.component("spikes")
