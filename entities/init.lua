@@ -9,4 +9,8 @@ for _, file in pairs(files) do
     end
 end
 
+Entities.spawn = function(name, x, y)
+    return Entities[name].spawn(x, y)
+end
+
 return Entities

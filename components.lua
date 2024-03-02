@@ -146,3 +146,11 @@ Concord.component("spider", function(c)
     c.stateTimer = 0
     c.grav = 0.2
 end)
+
+--[[
+    Tiles
+]]
+
+Concord.component("ladder")
+Concord.component("ladder_top")
+Concord.component("spikes")

@@ -18,6 +18,12 @@ Sprites.spider = love.graphics.newImage("sprites/Spider.png")
 
 -- World
 
+Sprites.brick = love.graphics.newImage("sprites/Brick.png")
 Sprites.block = love.graphics.newImage("sprites/Block.png")
+
+Sprites.ladder = love.graphics.newImage("sprites/Ladder.png")
+Sprites.ladderTop = love.graphics.newImage("sprites/LadderTop.png")
+
+Sprites.spikes = love.graphics.newImage("sprites/Spikes.png")
 
 return Sprites

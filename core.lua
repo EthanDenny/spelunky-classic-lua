@@ -27,6 +27,10 @@ function Core.lerp(a, b, t)
     return a * (1 - t) + b * t
 end
 
+function Core.choose(...)
+    return select(math.random(select("#", ...)), ...)
+end
+
 -- Return
 
 return Core
