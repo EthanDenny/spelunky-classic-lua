@@ -11,7 +11,6 @@ Spikes.assemble = function(e, x, y)
     :give("pos", x, y)
     :give("size", 16, 16)
     :give("collider", {x=16, y=16})
-    :give("solid")
     :give("spikes")
 end
 
