@@ -1,4 +1,4 @@
-local Concord = require("concord")
+local Concord = require("Concord")
 local Sprites = require("sprites")
 
 require("components")

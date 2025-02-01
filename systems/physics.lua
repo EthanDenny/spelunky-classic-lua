@@ -2,7 +2,7 @@
 -- move() is probably the only interesting function
 -- I wish I had a better way to do collisions in it
 
-local Concord = require("concord")
+local Concord = require("Concord")
 local Core = require("core")
 require("components")
 

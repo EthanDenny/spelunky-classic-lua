@@ -1,7 +1,7 @@
 -- We be drawing pixels baby
 -- Nothing super crazy here
 
-local Concord = require("concord")
+local Concord = require("Concord")
 local Core = require("core")
 
 require("components")

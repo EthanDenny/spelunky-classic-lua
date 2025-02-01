@@ -1,4 +1,4 @@
-local Concord = require("concord")
+local Concord = require("Concord")
 require("components")
 
 local PlayerHangSystem = Concord.system({

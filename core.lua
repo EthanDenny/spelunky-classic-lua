@@ -1,4 +1,4 @@
-local Concord = require("concord")
+local Concord = require("Concord")
 
 Core = {}
 Core.world = Concord.world()

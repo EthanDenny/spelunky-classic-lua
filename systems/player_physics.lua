@@ -1,4 +1,4 @@
-local Concord = require("concord")
+local Concord = require("Concord")
 local Collisions = require("collisions")
 local Core = require("core")
 require("components")
